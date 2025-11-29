@@ -1,31 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment/environment';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { environment } from '../../../src/environment/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
+  private tokenKey = 'jwtToken';
+  private _isLoggedIn$ = new BehaviorSubject<boolean>(
+    !!localStorage.getItem(this.tokenKey)
+  );
+  public isLoggedIn$ = this._isLoggedIn$.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
-  login(username: string, password: string) {
-    return this.http
-      .post<{ token: string }>(`${this.apiUrl}/login`, { username, password })
-      .pipe(tap((res) => localStorage.setItem('token', res.token)));
+  register(data: { username: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
   }
 
-  register(user: { username: string; password: string }) {
-    return this.http.post(`${this.apiUrl}/register`, user);
+  login(data: { username: string; password: string }): Observable<any> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, data).pipe(
+      tap((res) => {
+        localStorage.setItem(this.tokenKey, res.token);
+        this._isLoggedIn$.next(true);
+      })
+    );
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/']);
+    localStorage.removeItem(this.tokenKey);
+    this._isLoggedIn$.next(false);
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
   }
 }

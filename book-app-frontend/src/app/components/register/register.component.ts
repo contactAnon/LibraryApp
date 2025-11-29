@@ -1,61 +1,56 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="container mt-5">
-      <h2>Registrera ny användare</h2>
-      <form (ngSubmit)="register()">
-        <input
-          class="form-control mb-2"
-          type="text"
-          placeholder="Användarnamn"
-          [(ngModel)]="username"
-          name="username"
-          required
-        />
-        <input
-          class="form-control mb-2"
-          type="password"
-          placeholder="Lösenord"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
-        <button class="btn btn-success" type="submit">Registrera</button>
-      </form>
-      <p class="text-danger mt-2">{{ error }}</p>
-      <p class="text-success mt-2">{{ success }}</p>
-      <a routerLink="/login">Tillbaka till logga in</a>
-    </div>
+    <h2>Register</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input type="text" formControlName="username" placeholder="Username" />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <button type="submit">Register</button>
+    </form>
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
   `,
 })
-export class RegisterComponent {
-  username = '';
-  password = '';
-  error = '';
-  success = '';
+export class RegisterComponent implements OnInit {
+  form!: FormGroup; // <-- använd "!" för att säga till TS att den initieras senare
+  errorMessage = '';
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  register() {
-    this.auth
-      .register({ username: this.username, password: this.password })
-      .subscribe({
-        next: () => {
-          this.success = 'Registrering lyckad! Logga in.';
-          this.error = '';
-        },
-        error: (err) => {
-          this.error = err.error || 'Registrering misslyckades';
-          this.success = '';
-        },
-      });
+  ngOnInit() {
+    this.form = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
+
+  onSubmit() {
+    if (this.form.invalid) return;
+
+    this.authService.register(this.form.value).subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: (err) =>
+        (this.errorMessage = err.error || 'Registrering misslyckades'),
+    });
   }
 }
