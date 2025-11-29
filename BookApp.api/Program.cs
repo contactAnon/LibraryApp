@@ -6,31 +6,34 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ----- CORS -----
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularDev",
-        policy => policy
-            .WithOrigins("http://localhost:4200") // Angular dev server
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200") // Angular appens URL
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
 });
 
-// ----- Controllers & Swagger -----
+// Lägg till DBContext med SQLite
+builder.Services.AddDbContext<BookDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Lägg till JWT-service
+builder.Services.AddSingleton<JwtService>();
+
+// Lägg till Controllers och Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ----- DbContext med SQLite -----
-builder.Services.AddDbContext<BookDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Hämta JWT-nyckel från appsettings.json
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
 
-// ----- JWT Service -----
-builder.Services.AddSingleton<JwtService>();
-
-// ----- JWT Authentication -----
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"] ?? "supersecretkey123!");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "JwtBearer";
@@ -40,29 +43,29 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
 
+builder.Services.AddControllers();
+
+
 var app = builder.Build();
 
-// ----- Middleware -----
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseCors("AllowAngularDev");
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
