@@ -3,33 +3,41 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BookApp.Api.Services;
-
-public class JwtService
+namespace BookApp.Api.Services
 {
-    private readonly IConfiguration _config;
-
-    public JwtService(IConfiguration config)
+    public class JwtService
     {
-        _config = config;
-    }
+        private readonly IConfiguration _config;
 
-    public string GenerateToken(string username)
-    {
-        var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]!);
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var tokenDescriptor = new SecurityTokenDescriptor
+        public JwtService(IConfiguration config)
         {
-            Subject = new ClaimsIdentity(new[]
+            _config = config;
+        }
+
+        public string GenerateToken(string username)
+        {
+            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
+
+            var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username)
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["Jwt:ExpireMinutes"]!)),
-            Issuer = _config["Jwt:Issuer"],
-            Audience = _config["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+                new Claim(ClaimTypes.Name, username), // viktigt för User.Identity.Name
+                new Claim("username", username)
+            };
+
+            var creds = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256
+            );
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }

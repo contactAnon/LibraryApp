@@ -1,41 +1,64 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environment/environment';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, tap } from 'rxjs';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;
-  private tokenKey = 'jwtToken';
-  private _isLoggedIn$ = new BehaviorSubject<boolean>(
-    !!localStorage.getItem(this.tokenKey)
-  );
-  public isLoggedIn$ = this._isLoggedIn$.asObservable();
+  private apiUrl = 'http://localhost:5267/api/auth';
+
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  register(data: { username: string; password: string }): Observable<any> {
+  // === REGISTER =======================================
+  register(data: { username: string; password: string }) {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
-  login(data: { username: string; password: string }): Observable<any> {
+  // === LOGIN ===========================================
+  login(data: { username: string; password: string }) {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, data).pipe(
       tap((res) => {
-        localStorage.setItem(this.tokenKey, res.token);
-        this._isLoggedIn$.next(true);
+        console.log('Backend returned token:', res.token);
+
+        localStorage.setItem('token', res.token);
+
+        console.log('Token saved to localStorage:', this.getToken());
+
+        this.isLoggedInSubject.next(true);
       })
     );
   }
 
+  // === LOGOUT ==========================================
   logout() {
-    localStorage.removeItem(this.tokenKey);
-    this._isLoggedIn$.next(false);
+    console.log('Clearing token...');
+    localStorage.removeItem('token');
+    this.isLoggedInSubject.next(false);
   }
 
+  // === TOKEN HELPERS ===================================
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem('token');
+  }
+
+  hasToken(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  decodeToken() {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      return jwtDecode(token);
+    } catch (e) {
+      console.error('Invalid token', e);
+      return null;
+    }
   }
 }
