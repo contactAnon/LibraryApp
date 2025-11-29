@@ -1,51 +1,58 @@
-import { Component } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="container mt-5">
-      <h2>Logga in</h2>
-      <form (ngSubmit)="login()">
-        <input
-          class="form-control mb-2"
-          type="text"
-          placeholder="Användarnamn"
-          [(ngModel)]="username"
-          name="username"
-          required
-        />
-        <input
-          class="form-control mb-2"
-          type="password"
-          placeholder="Lösenord"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
-        <button class="btn btn-primary" type="submit">Logga in</button>
-      </form>
-      <p class="text-danger mt-2">{{ error }}</p>
-      <a routerLink="/register">Har du inget konto? Registrera här</a>
-    </div>
+    <h2>Login</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input type="text" formControlName="username" placeholder="Username" />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <button type="submit">Login</button>
+    </form>
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
   `,
 })
-export class LoginComponent {
-  username = '';
-  password = '';
-  error = '';
+export class LoginComponent implements OnInit {
+  form!: FormGroup; // Initieras i ngOnInit
+  errorMessage = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  login() {
-    this.auth.login(this.username, this.password).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: () => (this.error = 'Fel användarnamn eller lösenord'),
+  ngOnInit() {
+    this.form = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
+  }
+
+  onSubmit() {
+    if (this.form.invalid) return;
+
+    this.authService
+      .login(this.form.value as { username: string; password: string })
+      .subscribe({
+        next: () => this.router.navigate(['/landing']),
+        error: (err) =>
+          (this.errorMessage = err.error || 'Fel användarnamn eller lösenord'),
+      });
   }
 }

@@ -6,62 +6,60 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers
-builder.Services.AddControllers();
+// ----- CORS -----
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev",
+        policy => policy
+            .WithOrigins("http://localhost:4200") // Angular dev server
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
 
-// Swagger/OpenAPI
+// ----- Controllers & Swagger -----
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database (InMemory for development)
+// ----- DbContext med SQLite -----
 builder.Services.AddDbContext<BookDbContext>(options =>
-    options.UseInMemoryDatabase("BooksDb"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT service for generating tokens
+// ----- JWT Service -----
 builder.Services.AddSingleton<JwtService>();
 
-// CORS: allow Angular frontend
-builder.Services.AddCors(options =>
+// ----- JWT Authentication -----
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"] ?? "supersecretkey123!");
+builder.Services.AddAuthentication(options =>
 {
-    options.AddPolicy("AllowAngular",
-        policy => policy
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin());
-});
-
-// JWT Authentication
-var key = Encoding.UTF8.GetBytes(
-    builder.Configuration["Jwt:Key"] ?? "supersecretkey123!"
-);
-
-builder.Services.AddAuthentication("JwtBearer")
-    .AddJwtBearer("JwtBearer", options =>
+    options.DefaultAuthenticateScheme = "JwtBearer";
+    options.DefaultChallengeScheme = "JwtBearer";
+})
+.AddJwtBearer("JwtBearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ClockSkew = TimeSpan.Zero // tokens expire exactly on time
-        };
-    });
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 
 var app = builder.Build();
 
-// Development tools
-app.UseSwagger();
-app.UseSwaggerUI();
+// ----- Middleware -----
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors("AllowAngularDev");
 
 app.UseHttpsRedirection();
-
-app.UseCors("AllowAngular"); // << IMPORTANT for Angular dev server
-
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,38 +1,36 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <header class="navbar navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand">My Book App</a>
-        <button class="btn btn-primary" (click)="goLogin()">Logga in</button>
-      </div>
-    </header>
-
-    <section class="hero text-center mt-5">
-      <h1>Välkommen till din boksamling</h1>
-      <button class="btn btn-success btn-lg mt-3" (click)="addBook()">
-        Lägg till en ny bok
+    <header>
+      <button
+        *ngIf="!(auth.isLoggedIn$ | async)"
+        (click)="router.navigate(['/login'])"
+      >
+        Login
       </button>
+      <button *ngIf="auth.isLoggedIn$ | async" (click)="auth.logout()">
+        Logout
+      </button>
+    </header>
+    <section>
+      <h1>Welcome to Book App</h1>
+      <button (click)="addBook()">Lägg till en ny bok</button>
     </section>
   `,
 })
 export class LandingComponent {
-  constructor(private router: Router, private auth: AuthService) {}
-
-  goLogin() {
-    this.router.navigate(['/login']);
-  }
+  constructor(public auth: AuthService, private router: Router) {}
 
   addBook() {
-    if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/book-form']);
+    if (this.auth.getToken()) {
+      this.router.navigate(['/add-book']);
     } else {
       this.router.navigate(['/login']);
     }

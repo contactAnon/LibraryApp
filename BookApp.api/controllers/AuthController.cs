@@ -1,7 +1,7 @@
-using BookApp.Api.Data;
+using Microsoft.AspNetCore.Mvc;
 using BookApp.Api.Models;
 using BookApp.Api.Services;
-using Microsoft.AspNetCore.Mvc;
+using BookApp.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookApp.Api.Controllers
@@ -10,38 +10,39 @@ namespace BookApp.Api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly BookDbContext _dbContext;
+        private readonly BookDbContext _context;
         private readonly JwtService _jwtService;
 
-        public AuthController(BookDbContext dbContext, JwtService jwtService)
+        public AuthController(BookDbContext context, JwtService jwtService)
         {
-            _dbContext = dbContext;
+            _context = context;
             _jwtService = jwtService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User request)
+        public async Task<IActionResult> Register([FromBody] User newUser)
         {
-            if (await _dbContext.Users.AnyAsync(u => u.Username == request.Username))
+            if (await _context.Users.AnyAsync(u => u.Username == newUser.Username))
                 return Conflict("Användarnamnet finns redan.");
 
-            _dbContext.Users.Add(request);
-            await _dbContext.SaveChangesAsync();
-
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User request)
+        public async Task<IActionResult> Login([FromBody] User user)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u =>
-                u.Username == request.Username && u.Password == request.Password);
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
 
-            if (user == null)
-                return Unauthorized("Fel användarnamn eller lösenord");
+            if (existingUser != null)
+            {
+                var token = _jwtService.GenerateToken(user.Username);
+                return Ok(new { token });
+            }
 
-            var token = _jwtService.GenerateToken(user.Username);
-            return Ok(new { token });
+            return Unauthorized("Fel användarnamn eller lösenord");
         }
     }
 }

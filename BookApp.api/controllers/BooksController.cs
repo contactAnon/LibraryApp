@@ -1,60 +1,90 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using BookApp.Api.Data;
 using BookApp.Api.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BookApp.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class BooksController : ControllerBase
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "JwtBearer")] // Endast inloggade användare
+    public class BookController : ControllerBase
     {
         private readonly BookDbContext _context;
-        public BooksController(BookDbContext context) { _context = context; }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public BookController(BookDbContext context)
         {
-            var currentUser = User.Identity?.Name;
-            return await _context.Books.Where(b => b.Username == currentUser).ToListAsync();
+            _context = context;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Book>> AddBook(Book book)
+        // GET: api/book
+        [HttpGet]
+        public async Task<IActionResult> GetBooks()
         {
-            book.Username = User.Identity?.Name ?? "";
+            var username = User.Identity?.Name;
+            if (username == null) return Unauthorized();
+
+            var books = await _context.Books
+                .Include(b => b.User)
+                .Where(b => b.User!.Username == username)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        // POST: api/book
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] Book book)
+        {
+            var username = User.Identity?.Name;
+            if (username == null) return Unauthorized();
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null) return Unauthorized();
+
+            book.UserId = user.Id;
+
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetBooks), new { id = book.Id }, book);
+
+            return Ok(book);
         }
 
+        // PUT: api/book/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, Book book)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] Book updatedBook)
         {
-            if (id != book.Id) return BadRequest();
+            var username = User.Identity?.Name;
+            if (username == null) return Unauthorized();
 
-            var currentUser = User.Identity?.Name;
-            var existingBook = await _context.Books.FindAsync(id);
-            if (existingBook == null || existingBook.Username != currentUser) return Unauthorized();
+            var book = await _context.Books.Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
+            if (book == null) return NotFound();
+            if (book.User?.Username != username) return Forbid();
 
-            existingBook.Title = book.Title;
-            existingBook.Author = book.Author;
-            existingBook.PublicationDate = book.PublicationDate;
+            book.Title = updatedBook.Title;
+            book.Author = updatedBook.Author;
+            book.PublicationDate = updatedBook.PublicationDate;
+
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(book);
         }
 
+        // DELETE: api/book/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            var currentUser = User.Identity?.Name;
-            var book = await _context.Books.FindAsync(id);
-            if (book == null || book.Username != currentUser) return Unauthorized();
+            var username = User.Identity?.Name;
+            if (username == null) return Unauthorized();
+
+            var book = await _context.Books.Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
+            if (book == null) return NotFound();
+            if (book.User?.Username != username) return Forbid();
 
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
     }
