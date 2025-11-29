@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using BookApp.Api.Data;
 using BookApp.Api.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace BookApp.Api.Controllers
 {
@@ -61,7 +60,7 @@ namespace BookApp.Api.Controllers
 
             var book = await _context.Books.Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
             if (book == null) return NotFound();
-            if (book.User?.Username != username) return Forbid();
+            if (book.User?.Username != username) return Forbid(); // Endast ägaren kan uppdatera
 
             book.Title = updatedBook.Title;
             book.Author = updatedBook.Author;
@@ -80,7 +79,7 @@ namespace BookApp.Api.Controllers
 
             var book = await _context.Books.Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
             if (book == null) return NotFound();
-            if (book.User?.Username != username) return Forbid();
+            if (book.User?.Username != username) return Forbid(); // Endast ägaren kan ta bort
 
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();

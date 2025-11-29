@@ -24,12 +24,12 @@ import { AuthService } from '../../services/auth.service';
       />
       <button type="submit">Register</button>
     </form>
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p *ngIf="message">{{ message }}</p>
   `,
 })
 export class RegisterComponent implements OnInit {
-  form!: FormGroup; // <-- använd "!" för att säga till TS att den initieras senare
-  errorMessage = '';
+  form!: FormGroup;
+  message = '';
 
   constructor(
     private fb: FormBuilder,
@@ -48,9 +48,17 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.authService.register(this.form.value).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: (err) =>
-        (this.errorMessage = err.error || 'Registrering misslyckades'),
+      next: (res: any) => {
+        console.log('Backend response:', res);
+        // Visa texten från backend, eller fallback
+        this.message = res?.text || 'Registrering lyckades!';
+        // Navigera till login efter en kort stund
+        setTimeout(() => this.router.navigate(['/login']), 1500);
+      },
+      error: (err) => {
+        console.error('Registration error:', err);
+        this.message = err.error?.error || 'Registrering misslyckades';
+      },
     });
   }
 }

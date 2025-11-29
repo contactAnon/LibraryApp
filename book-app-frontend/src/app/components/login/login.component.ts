@@ -117,7 +117,13 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.form.value as { username: string; password: string })
       .subscribe({
-        next: () => this.router.navigate(['/landing']),
+        next: (res) => {
+          console.log(
+            'Login successful, token should be stored now:',
+            res.token
+          );
+          this.router.navigate(['/landing']);
+        },
         error: (err) =>
           (this.errorMessage = err.error || 'Fel användarnamn eller lösenord'),
       });

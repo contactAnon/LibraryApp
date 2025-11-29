@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using BookApp.Api.Data;
 using BookApp.Api.Models;
 using BookApp.Api.Services;
-using BookApp.Api.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookApp.Api.Controllers
 {
@@ -19,6 +19,7 @@ namespace BookApp.Api.Controllers
             _jwtService = jwtService;
         }
 
+        // POST: api/auth/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User newUser)
         {
@@ -27,22 +28,23 @@ namespace BookApp.Api.Controllers
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-            return Ok();
+
+            return Ok(new { text = "Användare registrerad!" });
         }
 
+        // POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] User loginUser)
         {
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == loginUser.Username && u.Password == loginUser.Password);
 
-            if (existingUser != null)
-            {
-                var token = _jwtService.GenerateToken(user.Username);
-                return Ok(new { token });
-            }
+            if (user == null)
+                return Unauthorized("Fel användarnamn eller lösenord");
 
-            return Unauthorized("Fel användarnamn eller lösenord");
+            var token = _jwtService.GenerateToken(user.Username);
+
+            return Ok(new { token });
         }
     }
 }

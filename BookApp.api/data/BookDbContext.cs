@@ -5,10 +5,9 @@ namespace BookApp.Api.Data
 {
     public class BookDbContext : DbContext
     {
-        public BookDbContext(DbContextOptions<BookDbContext> options)
-            : base(options) { }
+        public BookDbContext(DbContextOptions<BookDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<Book> Books { get; set; } = null!;
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Book> Books => Set<Book>();
     }
 }
