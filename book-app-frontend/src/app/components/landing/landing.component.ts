@@ -26,7 +26,7 @@ import { AuthService } from '../../services/auth.service';
   `,
 })
 export class LandingComponent {
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, public router: Router) {}
 
   addBook() {
     if (this.auth.getToken()) {
