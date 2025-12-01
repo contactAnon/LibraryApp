@@ -11,7 +11,7 @@ export interface Book {
 
 @Injectable({ providedIn: 'root' })
 export class BookService {
-  private apiUrl = 'https://localhost:5001/api/books';
+  private apiUrl = 'http://localhost:5267/api/book';
 
   constructor(private http: HttpClient) {}
 

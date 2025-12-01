@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'app-landing',
@@ -23,16 +24,59 @@ import { AuthService } from '../../services/auth.service';
       <h1>Welcome to Book App</h1>
       <button (click)="addBook()">Lägg till en ny bok</button>
     </section>
+    <h2 *ngIf="isLoggedIn">Dina böcker</h2>
+
+    <ul *ngIf="isLoggedIn && books.length > 0">
+      <li *ngFor="let book of books" class="book-item">
+        <strong>{{ book.title }}</strong>
+        <div>{{ book.author }}</div>
+        <div>{{ book.publicationDate | date : 'mediumDate' }}</div>
+      </li>
+    </ul>
+    <p *ngIf="isLoggedIn && books.length === 0">Du har inga böcker ännu.</p>
+    <p *ngIf="!isLoggedIn">Logga in för att se dina böcker.</p>
   `,
 })
 export class LandingComponent {
-  constructor(public auth: AuthService, public router: Router) {}
+  books: any[] = [];
+  isLoggedIn = false;
+  constructor(
+    public auth: AuthService,
+    public router: Router,
+    private bookService: BookService
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
+
+  ngOnInit() {
+    // Prenumerera på login-status
+    this.auth.isLoggedIn$.subscribe((status) => {
+      this.isLoggedIn = status;
+      if (status) {
+        this.loadBooks();
+      } else {
+        this.books = [];
+      }
+    });
+  }
 
   addBook() {
-    if (this.auth.getToken()) {
+    if (this.isLoggedIn) {
       this.router.navigate(['/add-book']);
     } else {
       this.router.navigate(['/login']);
     }
+  }
+
+  logout() {
+    this.auth.logout();
+    this.books = []; // Töm listan
+    this.router.navigate(['/']);
+  }
+  loadBooks() {
+    this.bookService.getBooks().subscribe({
+      next: (res: any) => (this.books = res),
+      error: (err) => console.error(err),
+    });
   }
 }

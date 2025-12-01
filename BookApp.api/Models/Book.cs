@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 namespace BookApp.Api.Models
 {
     public class Book
@@ -8,6 +9,7 @@ namespace BookApp.Api.Models
         public DateTime PublicationDate { get; set; }
 
         // Foreign key till användare
+        [JsonIgnore]
         public int UserId { get; set; }
         public User? User { get; set; }
     }

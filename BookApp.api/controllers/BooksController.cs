@@ -8,7 +8,7 @@ namespace BookApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "JwtBearer")] // Endast inloggade användare
+    [Authorize] // Endast inloggade användare
     public class BookController : ControllerBase
     {
         private readonly BookDbContext _context;
