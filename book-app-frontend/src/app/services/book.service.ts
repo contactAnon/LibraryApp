@@ -23,11 +23,18 @@ export class BookService {
     return this.http.post<Book>(this.apiUrl, book);
   }
 
-  updateBook(book: Book) {
+  updateBook(id: number, book: Book) {
     return this.http.put(`${this.apiUrl}/${book.id}`, book);
+  }
+
+  getBookById(id: number) {
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
   deleteBook(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+  getBook(id: number) {
+    return this.http.get(`${this.apiUrl}/books/${id}`);
   }
 }

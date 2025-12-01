@@ -31,6 +31,8 @@ import { BookService } from '../../services/book.service';
         <strong>{{ book.title }}</strong>
         <div>{{ book.author }}</div>
         <div>{{ book.publicationDate | date : 'mediumDate' }}</div>
+        <button (click)="editBook(book.id)">Redigera</button>
+        <button (click)="deleteBook(book.id)">Radera book</button>
       </li>
     </ul>
     <p *ngIf="isLoggedIn && books.length === 0">Du har inga böcker ännu.</p>
@@ -76,6 +78,16 @@ export class LandingComponent {
   loadBooks() {
     this.bookService.getBooks().subscribe({
       next: (res: any) => (this.books = res),
+      error: (err) => console.error(err),
+    });
+  }
+  editBook(id: number) {
+    this.router.navigate(['/edit-book', id]);
+  }
+
+  deleteBook(id: number) {
+    this.bookService.deleteBook(id).subscribe({
+      next: () => this.loadBooks(), // uppdatera listan
       error: (err) => console.error(err),
     });
   }
