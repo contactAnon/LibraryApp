@@ -20,10 +20,16 @@ import { BookService } from '../../services/book.service';
         Logout
       </button>
     </header>
+
     <section>
       <h1>Welcome to Book App</h1>
       <button (click)="addBook()">Lägg till en ny bok</button>
     </section>
+    <ng-container *ngIf="auth.isLoggedIn$ | async">
+      <button (click)="router.navigate(['/'])">Böcker</button>
+      <button (click)="router.navigate(['/quotes'])">Mina citat</button>
+    </ng-container>
+
     <h2 *ngIf="isLoggedIn">Dina böcker</h2>
 
     <ul *ngIf="isLoggedIn && books.length > 0">

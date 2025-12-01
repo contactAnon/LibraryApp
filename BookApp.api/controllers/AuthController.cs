@@ -42,9 +42,12 @@ namespace BookApp.Api.Controllers
             if (user == null)
                 return Unauthorized("Fel användarnamn eller lösenord");
 
-            var token = _jwtService.GenerateToken(user.Username);
+            var token = _jwtService.GenerateToken(user.Id, user.Username);
 
             return Ok(new { token });
         }
+
+
+    
     }
 }

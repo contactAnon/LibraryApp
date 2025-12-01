@@ -9,5 +9,6 @@ namespace BookApp.Api.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Book> Books => Set<Book>();
+        public DbSet<Quote> Quotes { get; set; }
     }
 }
