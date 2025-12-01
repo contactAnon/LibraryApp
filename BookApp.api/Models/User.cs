@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace BookApp.Api.Models
 {
     public class User
@@ -7,6 +9,7 @@ namespace BookApp.Api.Models
         public string Password { get; set; } = null!;
 
         // Navigation property: en användare kan ha flera böcker
+        [JsonIgnore]
         public ICollection<Book> Books { get; set; } = new List<Book>();
     }
 }

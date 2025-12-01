@@ -14,13 +14,16 @@ namespace BookApp.Api.Services
             _config = config;
         }
 
-        public string GenerateToken(string username)
+        public string GenerateToken(int userId, string username)
         {
-            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
+            // Säkerställ att Jwt:Key finns
+            var keyString = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is missing");
+            var key = Encoding.UTF8.GetBytes(keyString);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username), // viktigt för User.Identity.Name
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // Viktigt för User.FindFirstValue(ClaimTypes.NameIdentifier)
+                new Claim(ClaimTypes.Name, username),
                 new Claim("username", username)
             };
 

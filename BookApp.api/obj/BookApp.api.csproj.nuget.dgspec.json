@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\vscode_projekt\\angular\\books\\bookApp.api\\BookApp.api.csproj": {}
+    "G:\\vscode_projekt\\angular\\books\\BookApp.api\\BookApp.api.csproj": {}
   },
   "projects": {
-    "G:\\vscode_projekt\\angular\\books\\bookApp.api\\BookApp.api.csproj": {
+    "G:\\vscode_projekt\\angular\\books\\BookApp.api\\BookApp.api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\vscode_projekt\\angular\\books\\bookApp.api\\BookApp.api.csproj",
+        "projectUniqueName": "G:\\vscode_projekt\\angular\\books\\BookApp.api\\BookApp.api.csproj",
         "projectName": "BookApp.api",
-        "projectPath": "G:\\vscode_projekt\\angular\\books\\bookApp.api\\BookApp.api.csproj",
+        "projectPath": "G:\\vscode_projekt\\angular\\books\\BookApp.api\\BookApp.api.csproj",
         "packagesPath": "C:\\Users\\Marko\\.nuget\\packages\\",
-        "outputPath": "G:\\vscode_projekt\\angular\\books\\bookApp.api\\obj\\",
+        "outputPath": "G:\\vscode_projekt\\angular\\books\\BookApp.api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\"

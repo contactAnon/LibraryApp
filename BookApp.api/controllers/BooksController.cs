@@ -8,7 +8,7 @@ namespace BookApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "JwtBearer")] // Endast inloggade användare
+    [Authorize] // Endast inloggade användare
     public class BookController : ControllerBase
     {
         private readonly BookDbContext _context;
@@ -32,11 +32,23 @@ namespace BookApp.Api.Controllers
 
             return Ok(books);
         }
+        //GET: api/book/{id} 
+         [HttpGet("{id}")]
+        public async Task<IActionResult> GetBook(int id)
+        {
+             var book = await _context.Books.FindAsync(id);
+
+                if (book == null)
+                    return NotFound();
+
+                return Ok(book);
+        }
 
         // POST: api/book
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] Book book)
         {
+            
             var username = User.Identity?.Name;
             if (username == null) return Unauthorized();
 
