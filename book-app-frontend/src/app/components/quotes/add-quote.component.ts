@@ -9,26 +9,27 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-add-quote',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  template: `
-    <h2>Lägg till nytt citat</h2>
-    <form (ngSubmit)="save()">
-      <label
-        >Text: <input [(ngModel)]="quote.text" name="text" required /></label
-      ><br />
-      <label>Author: <input [(ngModel)]="quote.author" name="author" /></label
-      ><br />
-      <button type="submit">Spara</button>
-    </form>
-  `,
+  templateUrl: `./add-quote.component.html`,
 })
 export class AddQuoteComponent {
   quote: Quote = { text: '', author: '' };
-
+  errorMessage: string = '';
   constructor(private quoteService: QuoteService, private router: Router) {}
 
   save() {
-    this.quoteService
-      .addQuote(this.quote)
-      .subscribe(() => this.router.navigate(['/quotes']));
+    if (!this.quote.text || this.quote.text.trim() === '') {
+      this.errorMessage = 'Citat och författare fälten kan inte vara tomma';
+      return;
+    }
+
+    // Clear any previous error
+    this.errorMessage = '';
+
+    // Call the service
+    this.quoteService.addQuote(this.quote).subscribe({
+      next: () => this.router.navigate(['/quotes']),
+      error: () =>
+        (this.errorMessage = 'Ett fel uppstod vid sparande av citatet.'),
+    });
   }
 }

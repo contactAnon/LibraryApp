@@ -1,0 +1,42 @@
+<div
+  class="d-flex flex-column align-items-center p-3"
+  style="min-height: 100vh"
+>
+  <header class="bg-light border-bottom mb-4 w-100" style="max-width: 500px">
+    <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
+      <h2>Lägg till nytt citat</h2>
+    </div>
+  </header>
+  <section class="mb-4 w-100" style="max-width: 500px">
+    <form (ngSubmit)="save()" class="d-flex flex-column gap-3">
+      <div *ngIf="errorMessage" class="alert alert-warning">
+        {{ errorMessage }}
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Text</label>
+        <textarea
+          class="form-control"
+          [(ngModel)]="quote.text"
+          name="text"
+          rows="5"
+          placeholder="Skriv ditt citat här..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Author</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="quote.author"
+          name="Författare"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-success">Spara</button>
+    </form>
+  </section>
+</div>
