@@ -8,42 +8,7 @@ import { BookService } from '../../services/book.service';
   selector: 'app-landing',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  template: `
-    <header>
-      <button
-        *ngIf="!(auth.isLoggedIn$ | async)"
-        (click)="router.navigate(['/login'])"
-      >
-        Login
-      </button>
-      <button *ngIf="auth.isLoggedIn$ | async" (click)="auth.logout()">
-        Logout
-      </button>
-    </header>
-
-    <section>
-      <h1>Welcome to Book App</h1>
-      <button (click)="addBook()">Lägg till en ny bok</button>
-    </section>
-    <ng-container *ngIf="auth.isLoggedIn$ | async">
-      <button (click)="router.navigate(['/'])">Böcker</button>
-      <button (click)="router.navigate(['/quotes'])">Mina citat</button>
-    </ng-container>
-
-    <h2 *ngIf="isLoggedIn">Dina böcker</h2>
-
-    <ul *ngIf="isLoggedIn && books.length > 0">
-      <li *ngFor="let book of books" class="book-item">
-        <strong>{{ book.title }}</strong>
-        <div>{{ book.author }}</div>
-        <div>{{ book.publicationDate | date : 'mediumDate' }}</div>
-        <button (click)="editBook(book.id)">Redigera</button>
-        <button (click)="deleteBook(book.id)">Radera book</button>
-      </li>
-    </ul>
-    <p *ngIf="isLoggedIn && books.length === 0">Du har inga böcker ännu.</p>
-    <p *ngIf="!isLoggedIn">Logga in för att se dina böcker.</p>
-  `,
+  templateUrl: '../landing/landing.component.html',
 })
 export class LandingComponent {
   books: any[] = [];
