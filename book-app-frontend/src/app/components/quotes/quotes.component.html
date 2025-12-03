@@ -1,0 +1,75 @@
+<div
+  class="d-flex flex-column align-items-center p-3"
+  style="min-height: 100vh"
+>
+  <header class="bg-light border-bottom mb-4 w-100">
+    <nav *ngIf="auth.isLoggedIn$ | async">
+      <button
+        *ngIf="!(auth.isLoggedIn$ | async)"
+        (click)="router.navigate(['/login'])"
+        class="btn btn-primary"
+      >
+        Login
+      </button>
+      <button
+        *ngIf="auth.isLoggedIn$ | async"
+        (click)="auth.logout(); router.navigate(['/'])"
+        class="btn btn-outline-danger"
+      >
+        Logout
+      </button>
+
+      <button
+        (click)="router.navigate(['/books'])"
+        class="btn btn-outline-primary mx-3"
+      >
+        Böcker
+      </button>
+      <button
+        (click)="router.navigate(['/quotes'])"
+        class="btn btn-outline-secondary"
+      >
+        Mina citat
+      </button>
+    </nav>
+  </header>
+
+  <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
+    <h2>Mina citat</h2>
+  </div>
+
+  <section *ngIf="auth.isLoggedIn$ | async" class="mb-4 w-100 text-center">
+    <button
+      (click)="router.navigate(['/add-quote'])"
+      class="btn btn-success mb-4"
+    >
+      Lägg till nytt citat
+    </button>
+
+    <div
+      *ngIf="quotes.length > 0"
+      class="card p-3 shadow-sm mb-4"
+      style="max-width: 500px; width: 100%"
+    >
+      <div
+        *ngFor="let quote of quotes"
+        class="quote-item d-flex flex-column align-items-center mb-3"
+      >
+        <strong>{{ quote.text }}</strong> — {{ quote.author }}
+        <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
+          <button (click)="editQuote(quote.id!)" class="btn btn-sm btn-primary">
+            Redigera
+          </button>
+          <button
+            (click)="deleteQuote(quote.id!)"
+            class="btn btn-sm btn-danger"
+          >
+            Radera
+          </button>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="quotes.length === 0">Du har inga citat ännu.</p>
+  </section>
+  <p *ngIf="!(auth.isLoggedIn$ | async)">Logga in för att se dina citat.</p>
+</div>

@@ -73,26 +73,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <h2>Login</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input type="text" formControlName="username" placeholder="Username" />
-      <input
-        type="password"
-        formControlName="password"
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
-
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
-
-    <!-- Registrera knapp -->
-    <p>
-      Har du inget konto?
-      <button type="button" (click)="goToRegister()">Registrera här</button>
-    </p>
-  `,
+  templateUrl: `../login/login.component.html`,
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
