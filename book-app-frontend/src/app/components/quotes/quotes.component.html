@@ -38,7 +38,10 @@
     <h2>Mina citat</h2>
   </div>
 
-  <section *ngIf="auth.isLoggedIn$ | async" class="mb-4 w-100 text-center">
+  <section
+    *ngIf="auth.isLoggedIn$ | async"
+    class="mb-4 width-max: 30rem text-center"
+  >
     <button
       (click)="router.navigate(['/add-quote'])"
       class="btn btn-success mb-4"
@@ -49,7 +52,7 @@
     <div
       *ngIf="quotes.length > 0"
       class="card p-3 shadow-sm mb-4"
-      style="max-width: 500px; width: 100%"
+      style="width: 100%"
     >
       <div
         *ngFor="let quote of quotes"

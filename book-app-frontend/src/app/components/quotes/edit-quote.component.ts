@@ -9,17 +9,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-edit-quote',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  template: `
-    <h2>Redigera citat</h2>
-    <form *ngIf="quote" (ngSubmit)="save()">
-      <label
-        >Text: <input [(ngModel)]="quote.text" name="text" required /></label
-      ><br />
-      <label>Author: <input [(ngModel)]="quote.author" name="author" /></label
-      ><br />
-      <button type="submit">Spara</button>
-    </form>
-  `,
+  templateUrl: `./edit-quote.component.html`,
 })
 export class EditQuoteComponent implements OnInit {
   quote: Quote | undefined;

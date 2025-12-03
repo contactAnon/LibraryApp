@@ -35,7 +35,13 @@
         <a class="btn btn-outline-secondary" routerLink="/quotes">Mina citat</a>
       </div>
 
-      <button class="btn btn-success">Lägg till en ny bok</button>
+      <button
+        *ngIf="auth.isLoggedIn$ | async"
+        routerLink="/add-book"
+        class="btn btn-success"
+      >
+        Lägg till en ny bok
+      </button>
     </div>
   </section>
 
