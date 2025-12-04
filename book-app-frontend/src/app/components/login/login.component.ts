@@ -8,11 +8,11 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ThemeToggleComponent],
   templateUrl: `../login/login.component.html`,
 })
 export class LoginComponent implements OnInit {

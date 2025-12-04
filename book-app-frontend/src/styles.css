@@ -1,1 +1,115 @@
+:root {
+  /* Light theme (default) */
+  --bg: #ffffff;
+  --surface: #f8f9fa;
+  --text: #222222;
+  --muted: #6c757d;
+  --primary: #0d6efd;
+  --card-shadow: 0 2px 8px rgba(16, 24, 40, 0.04);
+}
 
+/* Dark theme override */
+.dark {
+  --bg: #0b1220;
+  --surface: #0f1724;
+  --text: #e6eef8;
+  --muted: #9aa7b2;
+  --primary: #3aa0ff;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* Apply variables globally */
+html,
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.container,
+.card {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--card-shadow);
+  transition: background-color 200ms ease, color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+/* Bootstrap overrides (minor) to use variables for buttons etc */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Make inputs follow theme */
+.form-control {
+  background: var(--bg);
+  color: var(--text);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.dark .text-muted {
+  color: var(--secondary-text) !important;
+}
+.header {
+  background-color: var(--bg);
+  color: var(--text);
+  border-bottom: 1px solid var(--secondary-text);
+}
+/* ====== INPUT FIELDS (LIGHT MODE DEFAULT) ====== */
+input.form-control,
+textarea.form-control,
+select.form-select {
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--secondary-text);
+}
+
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+  color: var(--secondary-text);
+}
+
+/* ====== DARK MODE OVERRIDES ====== */
+body.dark input.form-control,
+body.dark textarea.form-control,
+body.dark select.form-select {
+  background-color: #1e1e1e; /* mörk grå */
+  color: #f5f5f5; /* vit text */
+  border: 1px solid #fff !important; /* synlig border */
+}
+
+body.dark input.form-control::placeholder,
+body.dark textarea.form-control::placeholder {
+  color: #999; /* bättre synlighet */
+}
+
+body.dark label {
+  color: var(--text);
+}
+body.dark input[type="date"] {
+  background-color: #1e1e1e !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+/* Datum-texten */
+body.dark input[type="date"]::-webkit-datetime-edit {
+  color: #fff !important;
+}
+
+body.dark .form-text {
+  color: var(--secondary-text);
+}
+
+/* Fixa autofill (Chrome färgar annars gult) */
+body.dark input.form-control:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #1e1e1e inset !important;
+  -webkit-text-fill-color: #fff !important;
+}

@@ -1,0 +1,10 @@
+<button
+  class="btn btn-outline-secondary"
+  (click)="toggle()"
+  title="Toggle theme"
+>
+  <ng-container *ngIf="(theme$ | async) === 'dark'; else light">
+    <i class="fa-solid fa-sun me-1"></i> Ljus
+  </ng-container>
+  <ng-template #light> <i class="fa-solid fa-moon me-1"></i> Mörk </ng-template>
+</button>

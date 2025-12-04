@@ -5,10 +5,11 @@ import { Quote } from '../../models/quote.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-edit-quote',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ThemeToggleComponent],
   templateUrl: `./edit-quote.component.html`,
 })
 export class EditQuoteComponent implements OnInit {

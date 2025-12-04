@@ -4,11 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Quote } from '../../models/quote.model';
 import { CommonModule } from '@angular/common';
-
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-quotes',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ThemeToggleComponent],
   templateUrl: `../quotes/quotes.component.html`,
 })
 export class QuotesComponent implements OnInit {
