@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookApp.Api.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize] // Endast inloggade användare
+    [Route("api/[controller]")] 
     public class BookController : ControllerBase
     {
         private readonly BookDbContext _context;

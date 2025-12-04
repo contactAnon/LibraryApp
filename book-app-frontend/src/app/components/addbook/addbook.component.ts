@@ -29,6 +29,10 @@ export class AddBookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
     this.form = this.fb.group({
       title: ['', Validators.required],
       author: ['', Validators.required],

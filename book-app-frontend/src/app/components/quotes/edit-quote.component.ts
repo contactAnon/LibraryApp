@@ -22,6 +22,10 @@ export class EditQuoteComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
     const id = this.route.snapshot.params['id'];
     this.quoteService.getQuotes().subscribe((quotes) => {
       this.quote = quotes.find((q) => q.id == id);

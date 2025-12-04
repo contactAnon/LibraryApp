@@ -15,12 +15,18 @@ import { AuthService } from '../../services/auth.service';
 export class AddQuoteComponent {
   quote: Quote = { text: '', author: '' };
   errorMessage: string = '';
+
   constructor(
     private quoteService: QuoteService,
     public router: Router,
     public auth: AuthService
   ) {}
-
+  ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
+  }
   save() {
     if (!this.quote.text || this.quote.text.trim() === '') {
       this.errorMessage = 'Citat och författare fälten kan inte vara tomma';
