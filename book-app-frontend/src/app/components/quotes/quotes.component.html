@@ -46,7 +46,7 @@
       (click)="router.navigate(['/add-quote'])"
       class="btn btn-success mb-4"
     >
-      Lägg till nytt citat
+      <i class="fa-solid fa-plus"></i> Lägg till nytt citat
     </button>
 
     <div
@@ -61,13 +61,13 @@
         <strong>{{ quote.text }}</strong> — {{ quote.author }}
         <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
           <button (click)="editQuote(quote.id!)" class="btn btn-sm btn-primary">
-            Redigera
+            <i class="fa-solid fa-edit"></i>Redigera
           </button>
           <button
             (click)="deleteQuote(quote.id!)"
             class="btn btn-sm btn-danger"
           >
-            Radera
+            <i class="fa-solid fa-trash"></i> Radera
           </button>
         </div>
       </div>

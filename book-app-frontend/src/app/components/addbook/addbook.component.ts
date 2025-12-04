@@ -14,20 +14,7 @@ import { BookService } from '../../services/book.service';
   selector: 'app-add-book',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <h2>Lägg till en ny bok</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input type="text" formControlName="title" placeholder="Titel" />
-      <input type="text" formControlName="author" placeholder="Författare" />
-      <input
-        type="date"
-        formControlName="publicationDate"
-        placeholder="Publiceringsdatum"
-      />
-      <button type="submit">Spara</button>
-    </form>
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
-  `,
+  templateUrl: `./addbook.component.html`,
 })
 export class AddBookComponent implements OnInit {
   form!: FormGroup;

@@ -8,29 +8,7 @@ import { BookService } from '../../services/book.service';
   selector: 'app-edit-book',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <h2>Redigera bok</h2>
-
-    <form (ngSubmit)="save()">
-      <input
-        type="text"
-        [(ngModel)]="book.title"
-        name="title"
-        placeholder="Titel"
-      />
-
-      <input
-        type="text"
-        [(ngModel)]="book.author"
-        name="author"
-        placeholder="Author"
-      />
-
-      <input type="date" [(ngModel)]="book.publicationDate" name="date" />
-
-      <button type="submit">Spara</button>
-    </form>
-  `,
+  templateUrl: `./editbook.component.html`,
 })
 export class EditBookComponent implements OnInit {
   book: any = {};

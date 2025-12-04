@@ -10,7 +10,7 @@
   <section class="mb-4 w-100" style="max-width: 500px">
     <form *ngIf="quote" (ngSubmit)="save()" class="d-flex flex-column gap-3">
       <div class="mb-2">
-        <label>Text:</label>
+        <label>Citat:</label>
         <input
           [(ngModel)]="quote.text"
           name="text"
@@ -19,7 +19,7 @@
         />
       </div>
       <div class="mb-2">
-        <label>Author:</label>
+        <label>Författare:</label>
         <input
           [(ngModel)]="quote.author"
           name="Författare"
@@ -28,7 +28,9 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-success">Spara</button>
+      <button type="submit" class="btn btn-success">
+        <i class="fa-solid fa-save"></i> Spara
+      </button>
     </form>
   </section>
 </div>
