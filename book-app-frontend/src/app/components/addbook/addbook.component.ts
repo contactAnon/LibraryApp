@@ -10,11 +10,11 @@ import {
 import { Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { AuthService } from '../../services/auth.service';
-
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-add-book',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ThemeToggleComponent],
   templateUrl: `./addbook.component.html`,
 })
 export class AddBookComponent implements OnInit {

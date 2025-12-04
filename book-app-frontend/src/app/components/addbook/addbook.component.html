@@ -9,6 +9,7 @@
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
       <h2>Lägg till en ny bok</h2>
     </div>
+    <app-theme-toggle></app-theme-toggle>
     <nav *ngIf="auth.isLoggedIn$ | async">
       <button
         *ngIf="!(auth.isLoggedIn$ | async)"
@@ -61,6 +62,7 @@
       />
       <label>Publiceringsdatum:</label>
       <input
+        class="form-control"
         type="date"
         formControlName="publicationDate"
         placeholder="Publiceringsdatum"

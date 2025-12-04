@@ -5,11 +5,11 @@ import { Quote } from '../../models/quote.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-add-quote',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ThemeToggleComponent],
   templateUrl: `./add-quote.component.html`,
 })
 export class AddQuoteComponent {

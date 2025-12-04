@@ -9,6 +9,7 @@
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
       <h2>Redigera citat</h2>
     </div>
+    <app-theme-toggle></app-theme-toggle>
     <nav *ngIf="auth.isLoggedIn$ | async">
       <button
         *ngIf="!(auth.isLoggedIn$ | async)"

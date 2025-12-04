@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { AuthService } from '../../services/auth.service';
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-edit-book',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ThemeToggleComponent],
   templateUrl: `./editbook.component.html`,
 })
 export class EditBookComponent implements OnInit {
