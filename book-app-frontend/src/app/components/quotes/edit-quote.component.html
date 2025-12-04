@@ -11,12 +11,12 @@
     <form *ngIf="quote" (ngSubmit)="save()" class="d-flex flex-column gap-3">
       <div class="mb-2">
         <label>Citat:</label>
-        <input
+        <textarea
           [(ngModel)]="quote.text"
           name="text"
           class="form-control"
           required
-        />
+        ></textarea>
       </div>
       <div class="mb-2">
         <label>Författare:</label>

@@ -58,7 +58,9 @@
         *ngFor="let quote of quotes"
         class="quote-item d-flex flex-column align-items-center mb-3"
       >
-        <strong>{{ quote.text }}</strong> — {{ quote.author }}
+        <p class="text-wrap text-center mb-1" style="max-width: 500px">
+          <strong>{{ quote.text }}</strong> — {{ quote.author }}
+        </p>
         <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
           <button (click)="editQuote(quote.id!)" class="btn btn-sm btn-primary">
             <i class="fa-solid fa-edit"></i>Redigera
