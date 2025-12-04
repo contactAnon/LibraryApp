@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { BookService } from '../../services/book.service';
-
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ThemeToggleComponent],
   templateUrl: './landing.component.html',
 })
 export class LandingComponent {
