@@ -4,7 +4,7 @@
 >
   <header class="bg-light border-bottom mb-4 w-100" style="max-width: 500px">
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
-      <h2>Login</h2>
+      <h2>Logga in</h2>
     </div>
   </header>
   <section class="mb-4 w-100" style="max-width: 500px">
@@ -16,16 +16,16 @@
       <input
         type="text"
         formControlName="username"
-        placeholder="Username"
+        placeholder="Användarnamn"
         class="form-control"
       />
       <input
         type="password"
         formControlName="password"
-        placeholder="Password"
+        placeholder="Lösenord"
         class="form-control"
       />
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary">Logga in</button>
     </form>
 
     <p *ngIf="errorMessage">{{ errorMessage }}</p>
@@ -38,7 +38,7 @@
           class="btn btn-outline-danger"
           (click)="goToRegister()"
         >
-          Registrera här
+          Registrera dig här
         </button>
       </p>
     </div>
