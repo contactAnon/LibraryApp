@@ -8,7 +8,7 @@ import { BookService } from '../../services/book.service';
   selector: 'app-landing',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: '../landing/landing.component.html',
+  templateUrl: './landing.component.html',
 })
 export class LandingComponent {
   books: any[] = [];

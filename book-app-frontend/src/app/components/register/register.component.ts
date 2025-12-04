@@ -13,19 +13,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <h2>Register</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input type="text" formControlName="username" placeholder="Username" />
-      <input
-        type="password"
-        formControlName="password"
-        placeholder="Password"
-      />
-      <button type="submit">Register</button>
-    </form>
-    <p *ngIf="message">{{ message }}</p>
-  `,
+  templateUrl: `./register.component.html`,
 })
 export class RegisterComponent implements OnInit {
   form!: FormGroup;
@@ -45,7 +33,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched(); // 🔥 highlight all errors
+      return;
+    }
 
     this.authService.register(this.form.value).subscribe({
       next: (res: any) => {

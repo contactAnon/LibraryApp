@@ -4,25 +4,24 @@
 >
   <header class="bg-light border-bottom mb-4 w-100" style="max-width: 500px">
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
-      <h1 class="mb-4">Welcome to Book App</h1>
+      <h1 class="mb-4">Välkommen till Bok appen</h1>
     </div>
   </header>
 
   <section class="mb-4 w-100" style="max-width: 500px">
     <div class="text-center">
       <div class="d-flex justify-content-center gap-2 flex-wrap p-3"></div>
+      <button
+        *ngIf="!(auth.isLoggedIn$ | async)"
+        class="btn btn-primary"
+        (click)="router.navigate(['/login'])"
+      >
+        Login
+      </button>
       <div
         *ngIf="auth.isLoggedIn$ | async"
         class="d-flex justify-content-center gap-2 flex-wrap mb-3"
       >
-        <button
-          *ngIf="!(auth.isLoggedIn$ | async)"
-          class="btn btn-primary"
-          (click)="router.navigate(['/login'])"
-        >
-          Login
-        </button>
-
         <button
           *ngIf="auth.isLoggedIn$ | async"
           class="btn btn-outline-danger"
