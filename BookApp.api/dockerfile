@@ -1,0 +1,18 @@
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+
+COPY BookApp.api/*.csproj ./BookApp.api/
+RUN dotnet restore BookApp.api/BookApp.api.csproj
+
+
+COPY BookApp.api/. ./BookApp.api/
+WORKDIR /src/BookApp.api
+RUN dotnet publish -c Release -o /app
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "BookApp.api.dll"]
