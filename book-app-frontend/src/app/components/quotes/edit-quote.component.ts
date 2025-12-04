@@ -4,7 +4,7 @@ import { QuoteService } from '../../services/quote.service';
 import { Quote } from '../../models/quote.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-edit-quote',
   standalone: true,
@@ -16,7 +16,8 @@ export class EditQuoteComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
+    public auth: AuthService,
     private quoteService: QuoteService
   ) {}
 

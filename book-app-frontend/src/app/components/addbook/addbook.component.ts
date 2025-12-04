@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-book',
@@ -23,7 +24,8 @@ export class AddBookComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private bookService: BookService,
-    private router: Router
+    public router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

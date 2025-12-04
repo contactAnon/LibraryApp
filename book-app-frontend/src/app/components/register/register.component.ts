@@ -21,8 +21,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    public router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.authService.register(this.form.value).subscribe({
+    this.auth.register(this.form.value).subscribe({
       next: (res: any) => {
         console.log('Backend response:', res);
         // Visa texten från backend, eller fallback

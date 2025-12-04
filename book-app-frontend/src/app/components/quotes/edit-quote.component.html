@@ -2,10 +2,42 @@
   class="d-flex flex-column align-items-center p-3"
   style="min-height: 100vh"
 >
-  <header class="bg-light border-bottom mb-4 w-100" style="max-width: 500px">
+  <header
+    class="bg-light border-bottom mb-4 w-100 d-flex flex-column align-items-center p-3"
+    style="max-width: 500px"
+  >
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
       <h2>Redigera citat</h2>
     </div>
+    <nav *ngIf="auth.isLoggedIn$ | async">
+      <button
+        *ngIf="!(auth.isLoggedIn$ | async)"
+        (click)="router.navigate(['/login'])"
+        class="btn btn-primary mx-3"
+      >
+        Login
+      </button>
+      <button
+        *ngIf="auth.isLoggedIn$ | async"
+        (click)="auth.logout(); router.navigate(['/'])"
+        class="btn btn-outline-danger mx-3 my-2"
+      >
+        Logout
+      </button>
+
+      <button
+        (click)="router.navigate(['/books'])"
+        class="btn btn-outline-primary mx-3 my-2"
+      >
+        Böcker
+      </button>
+      <button
+        (click)="router.navigate(['/quotes'])"
+        class="btn btn-outline-secondary mx-3 my-2"
+      >
+        Mina citat
+      </button>
+    </nav>
   </header>
   <section class="mb-4 w-100" style="max-width: 500px">
     <form *ngIf="quote" (ngSubmit)="save()" class="d-flex flex-column gap-3">

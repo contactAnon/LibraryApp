@@ -4,6 +4,7 @@ import { QuoteService } from '../../services/quote.service';
 import { Quote } from '../../models/quote.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-quote',
@@ -14,7 +15,11 @@ import { FormsModule } from '@angular/forms';
 export class AddQuoteComponent {
   quote: Quote = { text: '', author: '' };
   errorMessage: string = '';
-  constructor(private quoteService: QuoteService, private router: Router) {}
+  constructor(
+    private quoteService: QuoteService,
+    public router: Router,
+    public auth: AuthService
+  ) {}
 
   save() {
     if (!this.quote.text || this.quote.text.trim() === '') {
