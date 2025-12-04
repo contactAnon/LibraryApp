@@ -7,9 +7,9 @@ using BookApp.Api.Models;
 
 namespace BookApp.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class QuoteController : ControllerBase
     {
         private readonly BookDbContext _context;

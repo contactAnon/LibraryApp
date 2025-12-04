@@ -7,7 +7,7 @@
     style="max-width: 500px"
   >
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
-      <h2>Redigera citat</h2>
+      <h2>Lägg till en ny bok</h2>
     </div>
     <nav *ngIf="auth.isLoggedIn$ | async">
       <button
@@ -40,29 +40,35 @@
     </nav>
   </header>
   <section class="mb-4 w-100" style="max-width: 500px">
-    <form *ngIf="quote" (ngSubmit)="save()" class="d-flex flex-column gap-3">
-      <div class="mb-2">
-        <label>Citat:</label>
-        <textarea
-          [(ngModel)]="quote.text"
-          name="text"
-          class="form-control"
-          required
-        ></textarea>
-      </div>
-      <div class="mb-2">
-        <label>Författare:</label>
-        <input
-          [(ngModel)]="quote.author"
-          name="Författare"
-          type="text"
-          class="form-control"
-        />
-      </div>
-
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="d-flex flex-column gap-3"
+    >
+      <label>Titel:</label>
+      <input
+        class="form-control"
+        type="text"
+        formControlName="title"
+        placeholder="Titel"
+      />
+      <label>Författare:</label>
+      <input
+        class="form-control"
+        type="text"
+        formControlName="author"
+        placeholder="Författare"
+      />
+      <label>Publiceringsdatum:</label>
+      <input
+        type="date"
+        formControlName="publicationDate"
+        placeholder="Publiceringsdatum"
+      />
       <button type="submit" class="btn btn-success">
         <i class="fa-solid fa-save"></i> Spara
       </button>
     </form>
   </section>
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
 </div>

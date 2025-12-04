@@ -3,34 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-edit-book',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <h2>Redigera bok</h2>
-
-    <form (ngSubmit)="save()">
-      <input
-        type="text"
-        [(ngModel)]="book.title"
-        name="title"
-        placeholder="Titel"
-      />
-
-      <input
-        type="text"
-        [(ngModel)]="book.author"
-        name="author"
-        placeholder="Author"
-      />
-
-      <input type="date" [(ngModel)]="book.publicationDate" name="date" />
-
-      <button type="submit">Spara</button>
-    </form>
-  `,
+  templateUrl: `./editbook.component.html`,
 })
 export class EditBookComponent implements OnInit {
   book: any = {};
@@ -38,10 +16,15 @@ export class EditBookComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
-    private router: Router
+    public router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
     const id = this.route.snapshot.params['id'];
 
     this.bookService.getBookById(id).subscribe((res) => {

@@ -7,16 +7,25 @@ import { EditBookComponent } from './components/editbook/editbook.component';
 import { QuotesComponent } from './components/quotes/quotes.component';
 import { AddQuoteComponent } from './components/quotes/add-quote.component';
 import { EditQuoteComponent } from './components/quotes/edit-quote.component';
+import { AuthGuard } from '../app/guard/authguard';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
-  { path: 'landing', component: LandingComponent },
-  { path: 'add-book', component: AddBookComponent },
-  { path: 'quotes', component: QuotesComponent },
-  { path: 'add-quote', component: AddQuoteComponent },
-  { path: 'edit-quote/:id', component: EditQuoteComponent },
+  /* { path: 'landing', component: LandingComponent }, */
+  { path: 'add-book', component: AddBookComponent, canActivate: [AuthGuard] },
+  { path: 'quotes', component: QuotesComponent, canActivate: [AuthGuard] },
+  { path: 'add-quote', component: AddQuoteComponent, canActivate: [AuthGuard] },
+  {
+    path: 'edit-quote/:id',
+    component: EditQuoteComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'login', component: LoginComponent },
-  { path: 'edit-book/:id', component: EditBookComponent },
+  {
+    path: 'edit-book/:id',
+    component: EditBookComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'register', component: RegisterComponent },
   { path: '**', redirectTo: '' },
 ];

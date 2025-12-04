@@ -4,27 +4,43 @@
 >
   <header class="bg-light border-bottom mb-4 w-100" style="max-width: 500px">
     <div class="d-flex justify-content-center gap-2 flex-wrap p-3">
-      <h2>Login</h2>
+      <h2>Logga in</h2>
     </div>
   </header>
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <input type="text" formControlName="username" placeholder="Username" />
-    <input type="password" formControlName="password" placeholder="Password" />
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
-
-  <p *ngIf="errorMessage">{{ errorMessage }}</p>
-
-  <!-- Registrera knapp -->
-  <p>
-    Har du inget konto?
-    <button
-      type="button"
-      class="btn btn-outline-danger"
-      (click)="goToRegister()"
+  <section class="mb-4 w-100" style="max-width: 500px">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="d-flex flex-column gap-3"
     >
-      Registrera här
-    </button>
-  </p>
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Användarnamn"
+        class="form-control"
+      />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Lösenord"
+        class="form-control"
+      />
+      <button type="submit" class="btn btn-primary">Logga in</button>
+    </form>
+
+    <p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <div class="mb-2 align-items-center d-flex flex-column p-3">
+      <p>
+        Har du inget konto?
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="goToRegister()"
+        >
+          Registrera dig här
+        </button>
+      </p>
+    </div>
+  </section>
 </div>

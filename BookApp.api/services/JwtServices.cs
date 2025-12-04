@@ -22,7 +22,7 @@ namespace BookApp.Api.Services
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // Viktigt för User.FindFirstValue(ClaimTypes.NameIdentifier)
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()), 
                 new Claim(ClaimTypes.Name, username),
                 new Claim("username", username)
             };
@@ -36,7 +36,7 @@ namespace BookApp.Api.Services
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddMinutes(1),
                 signingCredentials: creds
             );
 

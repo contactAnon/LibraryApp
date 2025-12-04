@@ -21,6 +21,10 @@ export class QuotesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
     this.loadQuotes();
   }
 

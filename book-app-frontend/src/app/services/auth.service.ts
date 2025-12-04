@@ -61,4 +61,13 @@ export class AuthService {
       return null;
     }
   }
+
+  isTokenValid(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    const decoded: any = this.decodeToken();
+    const now = Date.now().valueOf() / 1000;
+    return decoded && decoded.exp && decoded.exp > now;
+  }
 }

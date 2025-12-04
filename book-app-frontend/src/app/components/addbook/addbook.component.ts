@@ -9,25 +9,13 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-book',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <h2>Lägg till en ny bok</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input type="text" formControlName="title" placeholder="Titel" />
-      <input type="text" formControlName="author" placeholder="Författare" />
-      <input
-        type="date"
-        formControlName="publicationDate"
-        placeholder="Publiceringsdatum"
-      />
-      <button type="submit">Spara</button>
-    </form>
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
-  `,
+  templateUrl: `./addbook.component.html`,
 })
 export class AddBookComponent implements OnInit {
   form!: FormGroup;
@@ -36,10 +24,15 @@ export class AddBookComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private bookService: BookService,
-    private router: Router
+    public router: Router,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {
+    if (!this.auth.isTokenValid()) {
+      this.auth.logout();
+      this.router.navigate(['/']);
+    }
     this.form = this.fb.group({
       title: ['', Validators.required],
       author: ['', Validators.required],
