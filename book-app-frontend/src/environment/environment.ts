@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5267/api',
+  apiUrl: 'https://libraryapp-sge8.onrender.com/api',
 };
