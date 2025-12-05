@@ -45,10 +45,11 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-app.UseCors();
+
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
