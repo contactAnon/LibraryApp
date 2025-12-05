@@ -46,6 +46,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BookDbContext>();
+    db.Database.Migrate();
+    if (!db.Users.Any())
+{
+    db.Users.Add(new User { Username = "admin", Password = "admin" });
+    db.SaveChanges();
+}
+}
+
+
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Urls.Add($"http://*:{port}");
 
