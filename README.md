@@ -6,7 +6,7 @@ Library App består av två delar:
 Backend (API)  
 Byggd i ASP.NET Core 9 (NET 9)  
 SQLite-databas via Entity Framework Core  
-JWT-baserad autentisering  
+JWT-baserad autentisering (loggas ut efter en minut)  
 Hostas på Render.com  
 Körs i Docker-kontainer  
 
