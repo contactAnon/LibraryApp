@@ -98,5 +98,15 @@
     <p *ngIf="!isLoggedIn" class="text-center">
       Logga in för att se dina böcker.
     </p>
+    <p class="text-center">
+      Har du inget konto?
+      <button
+        type="button"
+        class="btn btn-outline-danger mx-1"
+        (click)="goToRegister()"
+      >
+        Registrera dig här
+      </button>
+    </p>
   </div>
 </div>
