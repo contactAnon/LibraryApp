@@ -4,6 +4,7 @@ using BookApp.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BookApp.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
