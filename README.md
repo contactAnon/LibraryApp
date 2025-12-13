@@ -15,3 +15,19 @@ Byggd i Angular
 JWT lagras i localStorage  
 Interceptor lägger automatiskt till token vid API-anrop  
 Hostas på Vercel  
+
+
+A full-stack project built with .NET 9, SQLite, and Angular, designed to demonstrate basic user management, JWT authentication, and a modern full-stack workflow. The Library App consists of two parts:  
+
+Backend (API)  
+Built with ASP.NET Core 9 (.NET 9)  
+SQLite database using Entity Framework Core  
+JWT-based authentication (automatic logout after one minute)  
+Hosted on Render.com  
+Runs in a Docker container  
+
+Frontend  
+Built with Angular  
+JWT stored in localStorage  
+An HTTP interceptor automatically attaches the token to API requests  
+Hosted on Vercel  
